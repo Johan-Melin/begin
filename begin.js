@@ -1,4 +1,4 @@
-const state = {
+ const state = {
   name: "World"
 };
 
@@ -7,22 +7,26 @@ const bindings = {};
 
 // --- Initialize all bindings ---
 function initBindings() {
-  // Text bindings: automatically render state in elements with data-bind
+  // Text bindings: render state automatically
   document.querySelectorAll("[data-bind]").forEach(el => {
     const key = el.getAttribute("data-bind");
     if (!bindings[key]) bindings[key] = [];
     bindings[key].push(el);
-    el.textContent = state[key] ?? ""; // initial render
+
+    // Auto-render initial value
+    el.textContent = state[key] ?? "";
   });
 
-  // Input bindings (v-model): automatically update state when typing
+  // Input bindings (v-model): update state on input
   document.querySelectorAll("[data-model]").forEach(input => {
     const key = input.getAttribute("data-model");
     if (!bindings[key]) bindings[key] = [];
     bindings[key].push(input);
-    input.value = state[key] ?? ""; // initial value
 
-    // update state automatically when user types
+    // Auto-set initial input value
+    input.value = state[key] ?? "";
+
+    // Auto-update state when typing
     input.addEventListener("input", e => {
       setState(key, e.target.value);
     });
@@ -37,8 +41,7 @@ function setState(key, value) {
   if (bindings[key]) {
     bindings[key].forEach(el => {
       if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") {
-        // Avoid overwriting input while user is typing
-        if (document.activeElement !== el) el.value = value;
+        if (document.activeElement !== el) el.value = value; // avoid overwriting while typing
       } else {
         el.textContent = value;
       }
@@ -46,7 +49,10 @@ function setState(key, value) {
   }
 }
 
-// Initialize bindings (text and input) on page load
+// Initialize all bindings: fully reactive and auto-rendered
 initBindings();
 
-// Now input and text span are fully reactive with minimal code
+// At this point:
+// 1. All text spans reflect state automatically
+// 2. All inputs are bound to state via v-model
+// 3. Initial values are rendered automatically
