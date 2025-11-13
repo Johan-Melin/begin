@@ -6,11 +6,10 @@
 </head>
 <body>
   <div id="app">
-    <!-- Static HTML — in a reactive system, we'd add bindings like {{ name }} -->
-    <h1>Hello, <span id="output"></span>!</h1>
+    <h1>Hello, <span data-bind="name"></span>!</h1>
 
     <p>Type to change the name:</p>
-    <input id="input" placeholder="Your name">
+    <input data-model="name" placeholder="Your name">
   </div>
   <script src="begin.js"></script>
 </body>
